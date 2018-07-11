@@ -238,7 +238,7 @@ var DefaultClient *http.Client
 type Validator func(*http.Response) error
 
 var DefaultValidator = func(resp *http.Response) error {
-	if resp.StatusCode < 200 && resp.StatusCode >= 300 {
+	if resp.StatusCode < 200 || resp.StatusCode >= 300 {
 		return NewError(resp, "Status "+strconv.Itoa(resp.StatusCode))
 	}
 	return nil
