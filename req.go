@@ -52,6 +52,21 @@ func BodyReader(v io.Reader) Body {
 
 type Option func(*http.Request) *http.Request
 
+func If(condition bool, options ...Option) Option {
+	if !condition {
+		return func(req *http.Request) *http.Request {
+			return req
+		}
+	}
+
+	return func(req *http.Request) *http.Request {
+		for _, option := range options {
+			req = option(req)
+		}
+		return req
+	}
+}
+
 func Header(key string, values ...string) Option {
 	return func(req *http.Request) *http.Request {
 		if len(values) <= 0 {
